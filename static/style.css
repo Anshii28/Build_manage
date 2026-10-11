@@ -1,0 +1,11 @@
+body{margin:0;font-family:'Segoe UI',sans-serif;background:#0f172a;color:white;display:flex}
+.sidebar{width:260px;background:linear-gradient(180deg,#0a1929,#112240);height:100vh;position:fixed;padding:20px;border-right:1px solid #ff8c42}
+.sidebar a{display:block;padding:12px 15px;margin:6px 0;color:#94a3b8;text-decoration:none;border-radius:8px;transition:0.3s}
+.sidebar a:hover,.sidebar a.active{background:#ff8c42;color:white;transform:translateX(5px)}
+.logo{font-size:24px;font-weight:bold;color:#ff8c42;margin-bottom:10px}
+.main{margin-left:260px;padding:30px;width:100%;background:radial-gradient(circle at top,#1e293b,#0f172a)}
+.card{background:rgba(30,41,59,0.8);border:1px solid #334155;padding:20px;border-radius:12px;border-left:4px solid #ff8c42;backdrop-filter:blur(10px)}
+.card h2{color:#ff8c42;font-size:28px}
+button{background:#ff8c42;color:white;border:none;padding:10px 18px;border-radius:6px;cursor:pointer;font-weight:bold}
+button:hover{background:#e67e22}
+input,select{background:#1e293b;border:1px solid #334155;color:white;padding:10px;border-radius:6px}
