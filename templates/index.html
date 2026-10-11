@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuildManage | Material Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar">
+        <a class="brand" href="/">
+            <div class="brand-icon"><i class="fa-solid fa-helmet-safety"></i></div>
+            <div><h2>Build<span>Manage</span></h2><small>CONSTRUCTION ERP</small></div>
+        </a>
+
+        <div class="menu-label">WORKSPACE</div>
+        <nav class="nav-menu">
+    <a class="nav-link active" href="#dashboard"><i class="fa-solid fa-border-all"></i> Dashboard</a>
+    <a class="nav-link" href="#inventory"><i class="fa-solid fa-cubes-stacked"></i> Materials</a>
+    <a class="nav-link" href="/dashboard#truck-management"><i class="fa-solid fa-truck-fast"></i> Trucks</a>
+    <a class="nav-link" href="#projects"><i class="fa-solid fa-building"></i> Projects</a>
+    <a class="nav-link" href="#reports"><i class="fa-solid fa-chart-line"></i> Reports</a>
+</nav>
+
+        <div class="sidebar-bottom">
+            <div class="construction-art"><i class="fa-solid fa-tower-observation"></i></div>
+            <p>Build Today.<br>Manage Smarter.</p>
+            <small>Construction Material System</small>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('show')">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input id="searchInput" type="search" placeholder="Search materials, suppliers...">
+            </div>
+            <div class="top-user">
+                <div class="status-dot"></div>
+                <div><strong>Admin</strong><small>Inventory Manager</small></div>
+                <i class="fa-solid fa-circle-user user-icon"></i>
+            </div>
+        </header>
+
+        <section class="hero" id="dashboard">
+            <div class="hero-content">
+                <span class="eyebrow"><i class="fa-solid fa-helmet-safety"></i> SMART CONSTRUCTION CONTROL</span>
+                <h1>Build Better.<br><span>Manage Smarter.</span></h1>
+                <p>One powerful workspace to manage construction materials,<br class="desktop-only">
+                track stock and keep every project moving.</p>
+                <a href="#inventory" class="hero-btn">Explore Inventory <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div class="hero-badge"><i class="fa-solid fa-truck-fast"></i><span>STOCK MOVING.<br>PROJECTS GROWING.</span></div>
+        </section>
+
+        <section class="page-content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            <div class="section-heading">
+                <div><span class="eyebrow orange-text">OVERVIEW</span><h2>Dashboard at a glance</h2>
+                <p>Here's what's happening with your materials today.</p></div>
+                <div class="date-pill"><i class="fa-regular fa-calendar"></i> Live Inventory</div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon orange"><i class="fa-solid fa-boxes-stacked"></i></div>
+                    <span>Total Materials</span><h3>{{ total_materials }}</h3>
+                    <small class="positive"><i class="fa-solid fa-database"></i> Items in inventory</small>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class="fa-solid fa-warehouse"></i></div>
+                    <span>Total Stock Value</span>
+                    <h3>₹{{ "{:,.0f}".format(stock_value) }}</h3>
+                    <small class="positive"><i class="fa-solid fa-check-circle"></i> Current inventory value</small>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class="fa-solid fa-truck-ramp-box"></i></div>
+                    <span>Stock Categories</span>
+                    <h3>{{ materials|map(attribute='category')|unique|list|length }}</h3>
+                    <small class="neutral">Material categories</small>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon red"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <span>Low Stock Alerts</span><h3>{{ low_stock }}</h3>
+                    <small class="warning">Needs your attention</small>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                <section class="panel inventory-panel" id="inventory">
+                    <div class="panel-heading">
+                        <div><span class="panel-icon"><i class="fa-solid fa-cubes-stacked"></i></span>
+                        <div><h3>Material Inventory</h3><p>Monitor your stock levels</p></div></div>
+                        <button class="primary-btn" onclick="toggleForm()"><i class="fa-solid fa-plus"></i> Add Material</button>
+                    </div>
+
+                    <form class="add-form" id="addForm" action="{{ url_for('add_material') }}" method="POST">
+                        <h3><i class="fa-solid fa-box-open"></i> Add New Material</h3>
+                        <div class="form-grid">
+                            <label>Material Name<input name="name" required placeholder="e.g. Cement"></label>
+                            <label>Category
+                                <select name="category">
+                                    <option>Building Material</option><option>Raw Material</option>
+                                    <option>Finishing</option><option>Equipment</option><option>Other</option>
+                                </select>
+                            </label>
+                            <label>Quantity<input type="number" name="quantity" min="0" step="0.01" required placeholder="0"></label>
+                            <label>Unit
+                                <select name="unit"><option>Bags</option><option>Ton</option><option>Kg</option><option>Pcs</option><option>Boxes</option><option>Units</option><option>Litres</option></select>
+                            </label>
+                            <label>Minimum Stock<input type="number" name="min_stock" min="0" value="10" required></label>
+                            <label>Unit Price (₹)<input type="number" name="price" min="0" step="0.01" required placeholder="0.00"></label>
+                            <label class="full-field">Supplier Name<input name="supplier" placeholder="Supplier or company name"></label>
+                        </div>
+                        <div class="form-actions"><button type="button" class="cancel-btn" onclick="toggleForm()">Cancel</button><button class="primary-btn" type="submit">Save Material</button></div>
+                    </form>
+
+                    <div class="table-wrap">
+                        <table id="materialTable">
+                            <thead><tr><th>Material</th><th>Category</th><th>Stock Available</th><th>Unit Price</th><th>Stock Value</th><th>Status</th><th>Action</th></tr></thead>
+                            <tbody>
+                            {% for m in materials %}
+                                <tr>
+                                    <td><div class="material-name"><span class="material-icon"><i class="fa-solid fa-cube"></i></span><div><strong>{{ m.name }}</strong><small>{{ m.supplier or 'No supplier added' }}</small></div></div></td>
+                                    <td>{{ m.category }}</td>
+                                    <td><strong>{{ "{:,.2f}".format(m.quantity).rstrip('0').rstrip('.') }} {{ m.unit }}</strong></td>
+                                    <td>₹{{ "{:,.2f}".format(m.price) }}</td>
+                                    <td><strong>₹{{ "{:,.2f}".format(m.quantity * m.price) }}</strong></td>
+                                    <td>{% if m.quantity <= m.min_stock %}<span class="badge low">Low Stock</span>{% else %}<span class="badge good">In Stock</span>{% endif %}</td>
+                                    <td><form method="POST" action="{{ url_for('delete_material', material_id=m.id) }}" onsubmit="return confirm('Delete {{ m.name }}?')"><button class="delete-btn" title="Delete material"><i class="fa-regular fa-trash-can"></i></button></form></td>
+                                </tr>
+                            {% else %}
+                                <tr><td colspan="7" class="empty">No materials yet. Add your first material above.</td></tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-footer"><span>Showing {{ total_materials }} materials</span><span><i class="fa-solid fa-circle-check"></i> Connected to SQLite</span></div>
+                </section>
+
+                <aside class="right-column">
+                    <section class="panel alert-panel">
+                        <div class="panel-heading compact"><div><span class="panel-icon red-icon"><i class="fa-solid fa-bell"></i></span><div><h3>Stock Alerts</h3><p>Items to replenish</p></div></div></div>
+                        {% set low_items = materials|selectattr('quantity', 'le', 0)|list %}
+                        {% for m in materials if m.quantity <= m.min_stock %}
+                        <div class="alert-item">
+                            <div class="alert-symbol"><i class="fa-solid fa-box"></i></div>
+
+<div class="alert-info">
+    <strong>{{ m.name }}</strong>
+    <small>{{ m.quantity }} {{ m.unit }} remaining</small>
+
+    <div class="progress">
+
+<span style="width: 0%;"></span>
+    </div>
+</div>
+                            <span class="badge low">Low</span>
+                        </div>
+                        {% else %}
+                        <div class="all-good"><i class="fa-solid fa-circle-check"></i><strong>All looking good!</strong><p>No low-stock materials found.</p></div>
+                        {% endfor %}
+                    </section>
+
+                    <section class="project-card" id="projects">
+                        <div class="project-image"><i class="fa-solid fa-city"></i><i class="fa-solid fa-truck-moving mini-truck"></i></div>
+                        <span class="eyebrow">PROJECT CONTROL</span>
+                        <h3>Every material.<br>Every project. In control.</h3>
+                        <p>Keep inventory organized and your next build on track.</p>
+                        <a href="#inventory">Manage Materials <i class="fa-solid fa-arrow-right"></i></a>
+                    </section>
+
+                    <section class="panel quick-panel" id="reports">
+                        <h3><i class="fa-solid fa-chart-pie orange-text"></i> Inventory Summary</h3>
+                        <div class="quick-row"><span>Healthy stock</span><strong>{{ total_materials - low_stock }}</strong></div>
+                        <div class="quick-row"><span>Needs restocking</span><strong class="red-text">{{ low_stock }}</strong></div>
+                        <div class="quick-row"><span>Tracked materials</span><strong>{{ total_materials }}</strong></div>
+                    </section>
+                </aside>
+            </div>
+            <footer><span>© 2026 <strong>BuildManage</strong> · Construction Material Management</span><span>Built for better projects <i class="fa-solid fa-heart orange-text"></i></span></footer>
+        </section>
+    </main>
+</div>
+
+<script>
+function toggleForm() {
+    const form = document.getElementById('addForm');
+    form.classList.toggle('visible');
+    if (form.classList.contains('visible')) {
+        form.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+    }
+}
+document.getElementById('searchInput').addEventListener('input', function () {
+    const query = this.value.toLowerCase();
+    document.querySelectorAll('#materialTable tbody tr').forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(query) ? '' : 'none';
+    });
+});
+</script>
+</body>
+</html>
