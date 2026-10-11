@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BuildManage - Premium</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',Segoe UI,sans-serif}
+html{scroll-behavior:smooth}
+body{display:flex;background:#f6f7fb}
+.sidebar{width:260px;background:#0f172a;height:100vh;position:fixed;padding:24px 16px;display:flex;flex-direction:column;justify-content:space-between;z-index:10}
+.sidebar .logo{font-size:20px;font-weight:800;color:#ff8c42;display:flex;gap:10px;margin-bottom:32px}
+.sidebar a{display:flex;gap:12px;padding:13px 16px;margin:6px 0;color:#94a3b8;text-decoration:none;border-radius:12px;font-size:14px;font-weight:500;cursor:pointer;transition:0.25s}
+.sidebar a.active{background:#ff8c42;color:white;box-shadow:0 6px 20px rgba(255,140,66,0.4)}
+.sidebar a:hover:not(.active){background:#1e293b;color:white;transform:translateX(5px)}
+.main{margin-left:260px;width:calc(100% - 260px);padding:28px 36px}
+.hero{background:linear-gradient(105deg,#0f172a 0%,#0f172a 52%,#1e293b 100%);border-radius:20px;display:flex;overflow:hidden;min-height:360px;margin-bottom:30px;position:relative;box-shadow:0 20px 40px rgba(15,23,42,0.15)}
+.hero-left{padding:50px 48px;width:54%;z-index:2}
+.hero-left h5{color:#ff8c42;font-size:11px;letter-spacing:3px;font-weight:700;margin-bottom:18px}
+.hero-left h1{font-size:40px;line-height:1.1;font-weight:800;color:white;margin-bottom:14px}
+.hero-left h1 span{color:#ff8c42}
+.hero-left p{font-size:14.5px;color:#94a3b8;line-height:1.7;margin-bottom:26px;max-width:440px}
+.btn-orange{background:#ff8c42;color:white;border:none;padding:14px 28px;border-radius:12px;font-weight:700;cursor:pointer;transition:0.3s;box-shadow:0 6px 18px rgba(255,140,66,0.35)}
+.btn-orange:hover{background:#ff7a20;transform:translateY(-3px) scale(1.02);box-shadow:0 10px 28px rgba(255,140,66,0.5)}
+.hero-right{width:46%;position:relative}
+.hero-right .bg{width:100%;height:100%;background:url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=900') center/cover no-repeat}
+.hero-right::after{content:'';position:absolute;left:0;top:0;width:70%;height:100%;background:linear-gradient(90deg,#0f172a 10%,transparent 100%)}
+.hero-badge{position:absolute;bottom:22px;right:22px;background:rgba(0,0,0,0.65);backdrop-filter:blur(12px);padding:14px 18px;border-radius:12px;font-size:11px;font-weight:800;color:white;line-height:1.5;letter-spacing:0.6px;border:1px solid rgba(255,255,255,0.12);z-index:3}
+
+.head{display:flex;justify-content:space-between;align-items:end;margin:30px 0 18px}
+.head h3{font-size:18px;font-weight:800;color:#0f172a}
+.head span{font-size:12px;color:#94a3b8}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.card{background:white;border-radius:16px;padding:22px;border:1px solid #eef2f7;box-shadow:0 4px 20px rgba(0,0,0,0.03);transition:0.3s;position:relative;overflow:hidden}
+.card:hover{transform:translateY(-5px);box-shadow:0 15px 35px rgba(0,0,0,0.08);border-color:#ff8c42}
+.card .icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px}
+.card h2{font-size:26px;font-weight:800;color:#0f172a;margin-bottom:4px}
+.card p{font-size:12.5px;color:#64748b;font-weight:600}
+.card small{color:#94a3b8;font-weight:400}
+.table-wrap{background:white;border-radius:16px;border:1px solid #eef2f7;overflow:hidden;margin-top:14px;box-shadow:0 4px 20px rgba(0,0,0,0.03)}
+.table-wrap table{width:100%;border-collapse:collapse}
+.table-wrap th{background:#f8fafc;text-align:left;padding:15px 18px;color:#64748b;font-size:11px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase}
+.table-wrap td{padding:15px 18px;border-top:1px solid #f1f5f9;font-size:13.5px}
+.badge{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700}
+.badge-green{background:#dcfce7;color:#166534} .badge-orange{background:#fff7ed;color:#c2410c}
+.form-row{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0;background:white;padding:16px;border-radius:14px;border:1px solid #eef2f7;box-shadow:0 2px 12px rgba(0,0,0,0.02)}
+.form-row input,.form-row select{padding:12px 15px;border:1.6px solid #e2e8f0;border-radius:10px;font-size:13px;flex:1;min-width:140px;outline:none;transition:0.2s}
+.form-row input:focus{border-color:#ff8c42;box-shadow:0 0 0 4px rgba(255,140,66,0.1)}
+</style>
+</head>
+<body>
+<div class="sidebar">
+<div>
+<div class="logo">🏗️ BuildManage</div>
+<a class="active" onclick="window.scrollTo({top:0,behavior:'smooth'})">📊 Dashboard</a>
+<a onclick="document.getElementById('materials').scrollIntoView({behavior:'smooth'})">🧱 Materials</a>
+<a onclick="document.getElementById('trucks').scrollIntoView({behavior:'smooth'})">🚚 Trucks</a>
+<a onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">📁 Projects</a>
+<a onclick="document.getElementById('reports').scrollIntoView({behavior:'smooth'})">📈 Reports</a>
+</div>
+<div style="text-align:center;border-top:1px solid #1e293b;padding-top:22px"><div style="font-size:42px;margin-bottom:6px">🏛️</div><div style="font-size:11px;color:#475569;font-weight:600;line-height:1.4">Build Today.<br>Manage Smarter.</div></div>
+</div>
+
+<div class="main">
+<div class="hero" id="top">
+<div class="hero-left">
+<h5>SMART CONSTRUCTION CONTROL</h5>
+<h1>Build Better,<br><span>Manage Smarter.</span></h1>
+<p>One powerful platform to manage construction materials, fleet and keep every project moving. Everything in one place.</p>
+<button class="btn-orange" onclick="document.getElementById('materials').scrollIntoView({behavior:'smooth'})">+ Add New Material</button>
+</div>
+<div class="hero-right"><div class="bg"></div><div class="hero-badge">EVERY MATERIAL,<br>EVERY PROJECT,<br>IN CONTROL</div></div>
+</div>
+
+<div class="head"><h3>Dashboard at a glance</h3><span>Welcome back! Here's what's happening with your inventory today.</span></div>
+<div class="cards">
+<div class="card"><div class="icon" style="background:#fff7ed">🧱</div><h2>{{ materials|length }}</h2><p>Total Materials<br><small>{{ materials|length }} categories</small></p></div>
+<div class="card"><div class="icon" style="background:#ecfdf5">💰</div><h2>₹{{ total_value|int }}</h2><p>Stock Value<br><small>Total inventory value</small></p></div>
+<div class="card"><div class="icon" style="background:#eff6ff">🚚</div><h2>{{ trucks|length }}</h2><p>Active Trucks<br><small>On trip: {{ trucks|selectattr('status','equalto','On Trip')|list|length }}</small></p></div>
+<div class="card"><div class="icon" style="background:#fef2f2">⚠️</div><h2>{{ materials|selectattr('quantity','lt',10)|list|length }}</h2><p>Stock Alerts<br><small>Low stock items</small></p></div>
+</div>
+
+<h3 id="materials" style="margin-top:32px;font-size:18px;font-weight:800">Material Inventory</h3>
+<div class="table-wrap"><table><tr><th>Material</th><th>Category</th><th>Stock</th><th>Price</th><th>Total Value</th><th>Status</th><th>Action</th></tr>
+{% for m in materials %}<tr><td><b>{{ m.name }}</b><br><small style="color:#94a3b8">{{ m.unit }}</small></td><td>{{ m.category }}</td><td><b>{{ m.quantity }}</b> {{ m.unit }}</td><td>₹{{ m.price }}</td><td><b>₹{{ (m.quantity*m.price)|int }}</b></td><td><span class="badge badge-green">In Stock</span></td><td><a href="/delete/{{ m.id }}" style="color:#ef4444;text-decoration:none;font-weight:700">🗑️</a></td></tr>{% endfor %}
+{% if not materials %}<tr><td colspan="7" style="text-align:center;padding:30px;color:#94a3b8">No materials yet. Add your first ✨</td></tr>{% endif %}
+</table></div>
+<form action="/add" method="POST" class="form-row"><input name="name" placeholder="Material Name (e.g. Bricks)" required><input name="quantity" type="number" placeholder="Qty" required><input name="unit" value="pcs"><input name="price" type="number" placeholder="Price" required><input name="category" value="General"><input name="min_stock" value="10" type="number"><button class="btn-orange">Add Material</button></form>
+
+<h3 id="trucks" style="margin-top:32px;font-size:18px;font-weight:800">🚚 Truck Management</h3>
+<div class="table-wrap"><table><tr><th>Truck No</th><th>Driver</th><th>Capacity</th><th>Phone</th><th>Status</th><th>Action</th></tr>
+{% for t in trucks %}<tr><td><b>{{ t.truck_number }}</b></td><td>{{ t.driver_name }}</td><td>{{ t.capacity }}</td><td>{{ t.phone or '-' }}</td><td><span class="badge badge-orange">{{ t.status }}</span></td><td><a href="/delete_truck/{{ t.id }}" style="color:#ef4444;text-decoration:none;font-weight:700">Delete</a></td></tr>{% endfor %}
+</table></div>
+<form action="/add_truck" method="POST" class="form-row"><input name="truck_number" placeholder="Truck No" required><input name="driver_name" placeholder="Driver" required><input name="capacity" placeholder="Capacity"><input name="phone" placeholder="Phone"><select name="status"><option>Available</option><option>On Trip</option><option>Maintenance</option></select><button class="btn-orange">Add Truck</button></form>
+
+<h3 id="projects" style="margin-top:32px;font-size:18px;font-weight:800">📁 Projects Overview</h3>
+<div class="table-wrap"><table><tr><th>Project Name</th><th>Location</th><th>Budget</th><th>Status</th><th>Action</th></tr>
+{% for p in projects %}<tr><td><b>{{ p.name }}</b></td><td>{{ p.location }}</td><td><b>₹{{ p.budget|int }}</b></td><td><span class="badge badge-green">{{ p.status }}</span></td><td><a href="/delete_project/{{ p.id }}" style="color:#ef4444;text-decoration:none;font-weight:700">Delete</a></td></tr>{% endfor %}
+{% if not projects %}<tr><td colspan="5" style="text-align:center;padding:30px;color:#94a3b8">No projects yet ✨</td></tr>{% endif %}
+</table></div>
+<form action="/add_project" method="POST" class="form-row"><input name="project_name" placeholder="Project Name" required><input name="location" placeholder="Location"><input name="budget" type="number" placeholder="Budget"><select name="status"><option>Ongoing</option><option>Completed</option><option>On Hold</option></select><button class="btn-orange">Add Project</button></form>
+
+<div id="reports" style="margin-top:32px;background:white;border-radius:16px;padding:22px;border:1px solid #eef2f7;display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+<div><h4 style="font-size:13px;margin-bottom:8px">📊 Total Projects</h4><h2 style="font-size:26px;font-weight:800">{{ projects|length }}</h2></div>
+<div><h4 style="font-size:13px;margin-bottom:8px">💰 Total Budget</h4><h2 style="font-size:26px;font-weight:800">₹{{ projects|sum(attribute='budget')|int if projects else 0 }}</h2></div>
+<div><h4 style="font-size:13px;margin-bottom:8px">📦 Stock Value</h4><h2 style="font-size:26px;font-weight:800">₹{{ total_value|int }}</h2><button onclick="window.print()" style="margin-top:10px;padding:8px 14px;border-radius:8px;border:1px solid #e2e8f0;background:white;cursor:pointer;font-weight:600">🖨️ Print Report</button></div>
+</div>
+<br><br><br>
+</div>
+</body>
+</html>       
