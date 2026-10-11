@@ -1,0 +1,13 @@
+<!DOCTYPE html><html><head><title>Reports</title></head>
+<body style="background:#0f0f0f;color:white;font-family:Arial;padding:30px">
+<h1 style="color:#ff8c42">📈 Reports</h1>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:20px 0">
+<div style="background:#1e1e1e;padding:20px;border-radius:10px"><h2>{{ total_projects }}</h2><p>Total Projects</p></div>
+<div style="background:#1e1e1e;padding:20px;border-radius:10px"><h2>₹{{ total_budget }}</h2><p>Total Budget</p></div>
+<div style="background:#1e1e1e;padding:20px;border-radius:10px"><h2>{{ total_materials }}</h2><p>Materials</p></div>
+<div style="background:#1e1e1e;padding:20px;border-radius:10px"><h2>₹{{ stock_value }}</h2><p>Stock Value</p></div>
+<div style="background:#1e1e1e;padding:20px;border-radius:10px"><h2>{{ total_trucks }}</h2><p>Trucks</p></div>
+</div>
+<button onclick="window.print()" style="background:white;color:black;padding:10px 20px;border:none;border-radius:5px">🖨️ Print</button>
+<br><br><a href="/dashboard" style="color:#ff8c42">← Back to Dashboard</a>
+</body></html>   
