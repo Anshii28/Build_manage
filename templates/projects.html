@@ -1,0 +1,14 @@
+<!DOCTYPE html><html><head><title>Projects</title></head>
+<body style="background:#0f0f0f;color:white;font-family:Arial;padding:30px">
+<h1 style="color:#ff8c42">🏢 Projects</h1>
+<form action="/add_project" method="POST" style="margin:20px 0">
+<input name="project_name" placeholder="Project Name" required style="padding:8px">
+<input name="location" placeholder="Location" style="padding:8px">
+<input name="budget" type="number" placeholder="Budget" style="padding:8px">
+<button type="submit" style="background:#ff8c42;color:white;padding:8px 15px;border:none;border-radius:5px">Add</button>
+</form>
+{% for p in projects %}
+<div style="background:#1e1e1e;padding:10px;margin:5px 0;border-radius:5px">{{ p.name }} - {{ p.location }} - ₹{{ p.budget }} <a href="/delete_project/{{ p.id }}" style="color:red;float:right">Delete</a></div>
+{% endfor %}
+<br><a href="/dashboard" style="color:#ff8c42">← Back to Dashboard</a>
+</body></html>    
